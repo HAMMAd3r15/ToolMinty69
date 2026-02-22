@@ -4,16 +4,20 @@ import { safeJsonLd } from '@/utils/security';
 
 interface ToolLayoutProps {
     children: React.ReactNode;
-    calculator: Calculator;
+    calculator?: Calculator;
 }
 
 export default function ToolLayout({ children, calculator }: ToolLayoutProps) {
+    const title = calculator?.title || 'ToolMinty — Free Online Tools';
+    const description = calculator?.description || 'Professional-grade digital tools for productivity, finance, and health.';
+    const category = calculator?.category || 'Utility';
+
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        'name': calculator.title,
-        'description': calculator.description,
-        'applicationCategory': calculator.category === 'Finance' ? 'BusinessApplication' : 'EducationalApplication',
+        'name': title,
+        'description': description,
+        'applicationCategory': category === 'Finance' ? 'BusinessApplication' : 'EducationalApplication',
         'operatingSystem': 'Any',
         'offers': {
             '@type': 'Offer',

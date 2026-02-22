@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ResultCard from '@/components/UI/ResultCard';
 import FAQSection from '@/components/UI/FAQSection';
 import ToolHeader from '@/components/UI/ToolHeader';
+import ToolLayout from '@/components/Layout/ToolLayout';
 import { calculators } from '@/utils/calculators';
 
 export default function GradeCalculator() {
@@ -49,58 +50,62 @@ export default function GradeCalculator() {
 
     const calc = calculators.find(c => c.href === '/grade-calculator');
 
+    if (!calc) return null;
+
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <ToolHeader
-                title={calc?.title || 'Grade Calculator'}
-                description={calc?.description || 'Quickly calculate your final grade percentage and letter grade from your assignment or exam marks.'}
-            />
+        <ToolLayout calculator={calc}>
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                <ToolHeader
+                    title={calc.title}
+                    description={calc.description}
+                />
 
-            <div className="card" style={{ marginBottom: '3rem' }}>
-                <div style={{ display: 'grid', gap: '2rem' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 500 }}>
-                                Earned Points
-                            </label>
-                            <input
-                                type="number"
-                                className="input"
-                                value={earnedPoints}
-                                onChange={(e) => setEarnedPoints(e.target.value)}
-                                placeholder="e.g. 85"
-                                style={{ width: '100%' }}
-                            />
+                <div className="card" style={{ marginBottom: '3rem' }}>
+                    <div style={{ display: 'grid', gap: '2rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 500 }}>
+                                    Earned Points
+                                </label>
+                                <input
+                                    type="number"
+                                    className="input"
+                                    value={earnedPoints}
+                                    onChange={(e) => setEarnedPoints(e.target.value)}
+                                    placeholder="e.g. 85"
+                                    style={{ width: '100%' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 500 }}>
+                                    Total Possible Points
+                                </label>
+                                <input
+                                    type="number"
+                                    className="input"
+                                    value={totalPoints}
+                                    onChange={(e) => setTotalPoints(e.target.value)}
+                                    placeholder="e.g. 100"
+                                    style={{ width: '100%' }}
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 500 }}>
-                                Total Possible Points
-                            </label>
-                            <input
-                                type="number"
-                                className="input"
-                                value={totalPoints}
-                                onChange={(e) => setTotalPoints(e.target.value)}
-                                placeholder="e.g. 100"
-                                style={{ width: '100%' }}
-                            />
-                        </div>
+
+                        {res && (
+                            <div style={{ marginTop: '1rem' }}>
+                                <ResultCard
+                                    title={`Your Score: ${res.percentage}%`}
+                                    value={`Grade: ${res.letterGrade}`}
+                                    color={res.letterGrade === 'F' ? 'error' : (res.letterGrade === 'A' ? 'success' : 'secondary')}
+                                    highlight={true}
+                                />
+                            </div>
+                        )}
                     </div>
-
-                    {res && (
-                        <div style={{ marginTop: '1rem' }}>
-                            <ResultCard
-                                title={`Your Score: ${res.percentage}%`}
-                                value={`Grade: ${res.letterGrade}`}
-                                color={res.letterGrade === 'F' ? 'error' : (res.letterGrade === 'A' ? 'success' : 'secondary')}
-                                highlight={true}
-                            />
-                        </div>
-                    )}
                 </div>
-            </div>
 
-            <FAQSection items={faqs} />
-        </div>
+                <FAQSection items={faqs} />
+            </div>
+        </ToolLayout>
     );
 }

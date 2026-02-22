@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { calculators, Calculator } from '@/utils/calculators';
+import { Calculator } from '@/utils/calculators';
 import SearchBar from '@/components/UI/SearchBar';
 
 interface ToolGridProps {
@@ -14,16 +14,18 @@ export default function ToolGrid({ calculators: initialCalculators }: ToolGridPr
 
     const categories = ['All', 'Chronology', 'Finance', 'Health', 'Utility', 'Fun'];
 
+    const calculatorsArray = Array.isArray(initialCalculators) ? initialCalculators : [];
+
     const filteredCalculators = (activeCategory === 'All'
-        ? initialCalculators
-        : initialCalculators.filter(c => c.category === activeCategory))
+        ? calculatorsArray
+        : calculatorsArray.filter(c => c.category === activeCategory))
         .sort((a, b) => {
             if (a.isPopular && !b.isPopular) return -1;
             if (!a.isPopular && b.isPopular) return 1;
             return 0;
         });
 
-    const popularTools = initialCalculators.filter(c => c.isPopular).slice(0, 10);
+    const popularTools = calculatorsArray.filter(c => c.isPopular).slice(0, 10);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>

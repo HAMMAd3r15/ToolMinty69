@@ -1,11 +1,13 @@
-import ToolLayout from '@/components\UI\ToolLayout';
+import ToolLayout from '@/components/Layout/ToolLayout';
+import { calculators } from '@/utils/calculators';
 
 export default function FileSizeConverterPage() {
+    const calc = calculators.find(c => c.href === '/file-size-converter');
+
+    if (!calc) return null;
+
     return (
-        <ToolLayout
-            title="File Size Converter"
-            description="Quickly convert between bits, bytes, KB, MB, GB, and TB for accurate data measurement."
-        >
+        <ToolLayout calculator={calc}>
             <div className="elite-card p-6 text-center">
                 <p className="text-gray-400">File Size Converter implementation coming soon.</p>
             </div>
